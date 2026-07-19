@@ -83,7 +83,7 @@ local function spamTP()
         if targetChar and targetChar:FindFirstChild("HumanoidRootPart") and localChar and localChar:FindFirstChild("HumanoidRootPart") then
         
         
-            localChar.HumanoidRootPart.CFrame = targetChar.HumanoidRootPart.CFrame
+            localChar.HumanoidRootPart.Position = targetChar.HumanoidRootPart.Position
         end
     end)
     hiddenfling=true
