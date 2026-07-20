@@ -23,21 +23,23 @@ local lp = Players.LocalPlayer
 local hiddenfling=false
 
 local function fling()
-	local oink
-	oink=RunService.Heartbeat:Connect(function()
-        if loopTp == false then
-            oink:Disconnect()
-        end
-        lp.Head.CanCollide = false
-        lp.UpperTorso.CanCollide = false
-        lp.LowerTorso.CanCollide = false
-        lp.HumanoidRootPart.CanCollide = false
-    end)
-    wait(.1)
-    local g = Instance.new("BodyThrust")
-    g.Parent = lp.HumanoidRootPart
-    g.Force = Vector3.new(999,999,999)
-    g.Location = lp.HumanoidRootPart.Position
+	local c, hrp, vel, movel = nil, nil, nil, 0.1
+	
+	while hiddenfling do
+		RunService.Heartbeat:Wait()
+		c = lp.Character
+		hrp = c and c:FindFirstChild("HumanoidRootPart")
+	
+		if hrp then
+			vel = hrp.Velocity
+			hrp.Velocity = vel * 10000 + Vector3.new(0, 10000, 0)
+			RunService.RenderStepped:Wait()
+			hrp.Velocity = vel
+			RunService.Stepped:Wait()
+			hrp.Velocity = vel + Vector3.new(0, movel, 0)
+			movel = -movel
+		end
+	end
 end
 
 local spawnConnection
@@ -46,7 +48,7 @@ local localConnection
 
 local function spamTP()
     local settings = {
-        Distance = -5,   
+        Distance = 2,   
         Speed = 0.3,     
         Smoothness = 0.2 
     }
@@ -82,8 +84,9 @@ local function spamTP()
 
         if targetChar and targetChar:FindFirstChild("HumanoidRootPart") and localChar and localChar:FindFirstChild("HumanoidRootPart") then
         
-        
-            localChar.HumanoidRootPart.Position = targetChar.HumanoidRootPart.Position
+            local oscillation = math.sin((os.clock() - startTime) * (math.pi / settings.Speed))
+            local offset = oscillation * settings.Distance
+            localChar.HumanoidRootPart.CFrame=targetChar.HumanoidRootPart.CFrame*CFrame.new(0, 0, offset)
         end
     end)
     hiddenfling=true
@@ -647,10 +650,11 @@ end
 
 Players.PlayerAdded:Connect(createTemp)
 
-Players.PlayerRemoved:Connect(function(plr)
+Players.PlayerRemoving:Connect(function(plr)
+    playerStuff[plr]:Destroy()
     for _, child in ipairs(ScrollingFrame:GetChildren()) do
         if child.Name == "Entry_" .. plr.UserId then
-            child:Destroy()
+            child:Destroy() -- just in case :)
         end
     end
 end)
