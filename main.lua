@@ -48,7 +48,7 @@ local localConnection
 
 local function spamTP()
     local settings = {
-        Distance = 2,   
+        Distance = 5,   
         Speed = 0.3,     
         Smoothness = 0.2 
     }
