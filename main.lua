@@ -3,7 +3,7 @@
 Services = setmetatable({}, {
 	__index = function(self, name)
 		local success, cache = pcall(function()
-			return cloneref(game:GetService(name))
+			return game:GetService(name)
 		end)
 		if success then
 			rawset(self, name, cache)
@@ -239,7 +239,7 @@ local function spamTP()
 	
 		local startTime = os.clock()
 
-		local tped = false 
+		--local tped = false 
 
 		runConnection = RunService.Heartbeat:Connect(function()
 
@@ -255,11 +255,18 @@ local function spamTP()
 		task.spawn(fling)
 	elseif option == 2 then
 		loopTp=true
-		local co 
-        co=RunService.Heartbeat:Connect(function ()
-            if not loopTp then co:Disconnect() end
-            SkidFling(p)
-        end)
+		--[[local cover=Instance.new("ScreenGui")
+        cover.ResetOnSpawn = false
+        cover.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+        cover.SafeAreaCompatibility=Enum.SafeAreaCompatibility.None
+        cover.ScreenInsets=Enum.ScreenInsets.None
+        local Frame=Instance.new("Frame")
+        Frame.Color3=Color3.new(0,0,0)
+        Frame.Size=UDim2.fromScale(1,1)
+        Frame.Position=UD1m2.fromScale(0,0)]]
+        repeat
+        SkidFling(p)
+        until loopTp == false
 	end
 end
 
@@ -764,7 +771,7 @@ UITextSizeConstraint_2.MaxTextSize = 14
 
 local TextLabel_6 = Instance.new("TextLabel")
 TextLabel_6.FontFace = Font.new("rbxassetid://12187365977", Enum.FontWeight.Medium, Enum.FontStyle.Normal)
-TextLabel_6.Text = "Skid Fling"
+TextLabel_6.Text = "Skid Fling (Flashes)"
 TextLabel_6.TextColor = BrickColor.new("Institutional white")
 TextLabel_6.TextColor3 = Color3.fromRGB(255, 255, 255)
 TextLabel_6.TextScaled = true
