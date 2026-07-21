@@ -266,6 +266,7 @@ local function spamTP()
         Frame.Position=UD1m2.fromScale(0,0)]]
         repeat
         SkidFling(p)
+        RunService.Heartbeat:Wait()
         until loopTp == false
 	end
 end
