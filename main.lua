@@ -286,7 +286,7 @@ UICorner.TopRightRadius = UDim.new(0.1, 0)
 local TextLabel = Instance.new("TextLabel")
 TextLabel.FontFace = Font.new("rbxassetid://12187365977", Enum.FontWeight.Medium, Enum.FontStyle.Normal)
 TextLabel.Text = "Target Fling"
-TextLabel.TextColor = BrickColor.new("Institutional white")
+--TextLabel.TextColor = BrickColor.new("Institutional white")
 TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 TextLabel.TextScaled = true
 TextLabel.TextSize = 14
@@ -300,6 +300,7 @@ TextLabel.Position = UDim2.new(0.07, 0, 0.03, 0)
 TextLabel.Size = UDim2.new(0.87, 0, 0.16, 0)
 TextLabel.Transparency = 1
 TextLabel.ZIndex = 2
+TextLabel.TextTransparency=0
 
 local UIStroke = Instance.new("UIStroke")
 UIStroke.Thickness = 3
@@ -318,7 +319,6 @@ ToggleButton.Name = "ToggleButton"
 local hitbox = Instance.new("TextButton")
 hitbox.FontFace = Font.new("rbxasset://fonts/families/SourceSansPro.json", Enum.FontWeight.Regular, Enum.FontStyle.Normal)
 hitbox.Text = ""
-hitbox.TextColor = BrickColor.new("Really black")
 hitbox.TextColor3 = Color3.fromRGB(0, 0, 0)
 hitbox.TextScaled = true
 hitbox.TextSize = 14
@@ -326,12 +326,12 @@ hitbox.TextTransparency = 1
 hitbox.TextWrapped = true
 hitbox.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 hitbox.BackgroundTransparency = 1
-hitbox.BorderColor = BrickColor.new("Really black")
 hitbox.BorderColor3 = Color3.fromRGB(0, 0, 0)
 hitbox.BorderSizePixel = 0
 hitbox.Size = UDim2.new(1, 0, 1, 0)
 hitbox.Transparency = 1
 hitbox.Name = "hitbox"
+
 
 local UITextSizeConstraint = Instance.new("UITextSizeConstraint")
 UITextSizeConstraint.MaxTextSize = 14
@@ -369,15 +369,16 @@ onoff.TextColor3 = Color3.fromRGB(255, 255, 255)
 onoff.TextScaled = true
 onoff.TextSize = 14
 onoff.TextWrapped = true
-onoff.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+--onoff.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 onoff.BackgroundTransparency = 1
-onoff.BorderColor = BrickColor.new("Really black")
+--onoff.BorderColor = BrickColor.new("Really black")
 onoff.BorderColor3 = Color3.fromRGB(0, 0, 0)
 onoff.BorderSizePixel = 0
 onoff.Position = UDim2.new(1.2, 0, 0.58, 0)
 onoff.Size = UDim2.new(0.23, 0, 0.41, 0)
 onoff.Transparency = 1
 onoff.Name = "onoff"
+onoff.TextTransparency=0
 
 local UIStroke_2 = Instance.new("UIStroke")
 UIStroke_2.Thickness = 3
@@ -397,7 +398,7 @@ TextLabel_2.BorderColor3 = Color3.fromRGB(0, 0, 0)
 TextLabel_2.BorderSizePixel = 0
 TextLabel_2.Position = UDim2.new(0.3, 0, 0.22, 0)
 TextLabel_2.Size = UDim2.new(0.4, 0, 0.53, 0)
-TextLabel_2.Transparency = 1
+TextLabel_2.TextTransparency = 1
 
 local UIStroke_3 = Instance.new("UIStroke")
 UIStroke_3.Thickness = 3
@@ -441,20 +442,21 @@ UICorner_5.TopRightRadius = UDim.new(0.3, 0)
 local TextLabel_3 = Instance.new("TextLabel")
 TextLabel_3.FontFace = Font.new("rbxassetid://12187365977", Enum.FontWeight.Medium, Enum.FontStyle.Normal)
 TextLabel_3.Text = "Click To Select"
-TextLabel_3.TextColor = BrickColor.new("Institutional white")
+--TextLabel_3.TextColor = BrickColor.new("Institutional white")
 TextLabel_3.TextColor3 = Color3.fromRGB(255, 255, 255)
 TextLabel_3.TextScaled = true
 TextLabel_3.TextSize = 14
 TextLabel_3.TextWrapped = true
 TextLabel_3.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 TextLabel_3.BackgroundTransparency = 1
-TextLabel_3.BorderColor = BrickColor.new("Really black")
+--TextLabel_3.BorderColor = BrickColor.new("Really black")
 TextLabel_3.BorderColor3 = Color3.fromRGB(0, 0, 0)
 TextLabel_3.BorderSizePixel = 0
 TextLabel_3.Position = UDim2.new(0.16, 0, 0.22, 0)
 TextLabel_3.Size = UDim2.new(0.67, 0, 0.53, 0)
 TextLabel_3.Transparency = 1
 TextLabel_3.ZIndex = 2
+TextLabel_3.TextTransparency = 1
 
 local UIStroke_4 = Instance.new("UIStroke")
 UIStroke_4.Thickness = 3
@@ -563,6 +565,7 @@ TextLabel_4.BorderSizePixel = 0
 TextLabel_4.Position = UDim2.new(0.3, 0, 0.22, 0)
 TextLabel_4.Size = UDim2.new(0.4, 0, 0.53, 0)
 TextLabel_4.Transparency = 1
+TextLabel_4.TextTransparency = 1
 
 local UIStroke_5 = Instance.new("UIStroke")
 UIStroke_5.Thickness = 3
@@ -653,6 +656,7 @@ TextLabel_5.Position = UDim2.new(0.06, 0, 0.22, 0)
 TextLabel_5.Size = UDim2.new(0.89, 0, 0.53, 0)
 TextLabel_5.Transparency = 1
 TextLabel_5.ZIndex = 2
+TextLabel_5.TextTransparency = 1
 
 local UIStroke_6 = Instance.new("UIStroke")
 UIStroke_6.Thickness = 3
@@ -765,6 +769,7 @@ TextLabel_6.Position = UDim2.new(0.16, 0, 0.22, 0)
 TextLabel_6.Size = UDim2.new(0.67, 0, 0.53, 0)
 TextLabel_6.Transparency = 1
 TextLabel_6.ZIndex = 2
+TextLabel_6.TextTransparency = 1
 
 local UIStroke_7 = Instance.new("UIStroke")
 UIStroke_7.Thickness = 3
@@ -821,6 +826,7 @@ TextLabel_7.Position = UDim2.new(0.16, 0, 0.22, 0)
 TextLabel_7.Size = UDim2.new(0.67, 0, 0.53, 0)
 TextLabel_7.Transparency = 1
 TextLabel_7.ZIndex = 2
+TextLabel_7.TextTransparency = 1
 
 local UIStroke_8 = Instance.new("UIStroke")
 UIStroke_8.Thickness = 3
@@ -912,7 +918,6 @@ UITextSizeConstraint_5.Parent = TextLabel_7
 Selector.Parent = SelectFling
 UICorner_15.Parent = Selector
 UIAspectRatioConstraint.Parent = UI
-
 
 ToggleButton.hitbox.MouseButton1Click:Connect(function ()
     if loopTp then
