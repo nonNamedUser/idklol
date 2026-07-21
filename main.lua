@@ -398,7 +398,7 @@ TextLabel_2.BorderColor3 = Color3.fromRGB(0, 0, 0)
 TextLabel_2.BorderSizePixel = 0
 TextLabel_2.Position = UDim2.new(0.3, 0, 0.22, 0)
 TextLabel_2.Size = UDim2.new(0.4, 0, 0.53, 0)
-TextLabel_2.TextTransparency = 1
+TextLabel_2.TextTransparency = 0
 
 local UIStroke_3 = Instance.new("UIStroke")
 UIStroke_3.Thickness = 3
@@ -456,7 +456,7 @@ TextLabel_3.Position = UDim2.new(0.16, 0, 0.22, 0)
 TextLabel_3.Size = UDim2.new(0.67, 0, 0.53, 0)
 TextLabel_3.Transparency = 1
 TextLabel_3.ZIndex = 2
-TextLabel_3.TextTransparency = 1
+TextLabel_3.TextTransparency = 0
 
 local UIStroke_4 = Instance.new("UIStroke")
 UIStroke_4.Thickness = 3
@@ -565,7 +565,7 @@ TextLabel_4.BorderSizePixel = 0
 TextLabel_4.Position = UDim2.new(0.3, 0, 0.22, 0)
 TextLabel_4.Size = UDim2.new(0.4, 0, 0.53, 0)
 TextLabel_4.Transparency = 1
-TextLabel_4.TextTransparency = 1
+TextLabel_4.TextTransparency = 0
 
 local UIStroke_5 = Instance.new("UIStroke")
 UIStroke_5.Thickness = 3
@@ -656,7 +656,7 @@ TextLabel_5.Position = UDim2.new(0.06, 0, 0.22, 0)
 TextLabel_5.Size = UDim2.new(0.89, 0, 0.53, 0)
 TextLabel_5.Transparency = 1
 TextLabel_5.ZIndex = 2
-TextLabel_5.TextTransparency = 1
+TextLabel_5.TextTransparency = 0
 
 local UIStroke_6 = Instance.new("UIStroke")
 UIStroke_6.Thickness = 3
@@ -769,7 +769,7 @@ TextLabel_6.Position = UDim2.new(0.16, 0, 0.22, 0)
 TextLabel_6.Size = UDim2.new(0.67, 0, 0.53, 0)
 TextLabel_6.Transparency = 1
 TextLabel_6.ZIndex = 2
-TextLabel_6.TextTransparency = 1
+TextLabel_6.TextTransparency = 0
 
 local UIStroke_7 = Instance.new("UIStroke")
 UIStroke_7.Thickness = 3
@@ -826,7 +826,7 @@ TextLabel_7.Position = UDim2.new(0.16, 0, 0.22, 0)
 TextLabel_7.Size = UDim2.new(0.67, 0, 0.53, 0)
 TextLabel_7.Transparency = 1
 TextLabel_7.ZIndex = 2
-TextLabel_7.TextTransparency = 1
+TextLabel_7.TextTransparency = 0
 
 local UIStroke_8 = Instance.new("UIStroke")
 UIStroke_8.Thickness = 3
