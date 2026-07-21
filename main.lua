@@ -229,12 +229,6 @@ local function spamTP()
 
 	spawnConnection = p.CharacterAdded:Connect(function(c)
 		targetChar = c
-		if option == 2 then
-			local result=false
-			repeat
-				result = SkidFling(p)
-			until result == true or loopTp == false
-		end
 	end)
 
 	localConnection = lp.CharacterAdded:Connect(function(c)
@@ -261,10 +255,11 @@ local function spamTP()
 		task.spawn(fling)
 	elseif option == 2 then
 		loopTp=true
-		local result=false
-		repeat
-			result = SkidFling(p)
-		until result == true or loopTp == false
+		local co 
+        co=RunService.Heartbeat:Connect(function ()
+            if not loopTp then co:Disconnect() end
+            SkidFling(p)
+        end)
 	end
 end
 
