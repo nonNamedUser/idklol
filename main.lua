@@ -948,7 +948,7 @@ end)
 local d1=false
 
 hitbox_5.MouseButton1Click:Connect(function ()
-    if tpPerson or option==1 then return end
+    if tpPerson then return end
     if d1 then return end
     d1=true
     task.spawn(function ()
@@ -960,7 +960,7 @@ hitbox_5.MouseButton1Click:Connect(function ()
 end)
 
 hitbox_4.MouseButton1Click:Connect(function ()
-    if tpPerson or option==2 then return end
+    if tpPerson then return end
     if d1 then return end
     d1=true
     task.spawn(function ()
