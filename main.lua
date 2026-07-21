@@ -933,6 +933,7 @@ Selector.Parent = SelectFling
 UICorner_15.Parent = Selector
 UIAspectRatioConstraint.Parent = UI
 
+TweenService:Create(Pattern_6,TweenInfo.new(2.5,Enum.EasingStyle.Linear, Enum.EasingDirection.InOut, -1), {Position=UDim2.fromScale(0,0)}):Play()
 
 ToggleButton.hitbox.MouseButton1Click:Connect(function ()
 	if loopTp then
