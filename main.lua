@@ -3,7 +3,7 @@
 Services = setmetatable({}, {
 	__index = function(self, name)
 		local success, cache = pcall(function()
-			return game:GetService(name)
+			return cloneref(game:GetService(name))
 		end)
 		if success then
 			rawset(self, name, cache)
