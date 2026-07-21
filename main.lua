@@ -16,11 +16,170 @@ Services = setmetatable({}, {
 
 local loopTp=false
 local tpPerson=""
+local option=1
 
 local Players=Services.Players
 local RunService=Services.RunService
+local TweenService=Services.TweenService
 local lp = Players.LocalPlayer
 local hiddenfling=false
+
+local SkidFling = function(TargetPlayer)
+    local Character = lp.Character
+    local Humanoid = Character and Character:FindFirstChildOfClass("Humanoid")
+    local RootPart = Humanoid and Humanoid.RootPart
+
+    local TCharacter = TargetPlayer.Character
+    local THumanoid
+    local TRootPart
+    local THead
+    local Accessory
+    local Handle
+
+    if TCharacter:FindFirstChildOfClass("Humanoid") then
+        THumanoid = TCharacter:FindFirstChildOfClass("Humanoid")
+    end
+    if THumanoid and THumanoid.RootPart then
+        TRootPart = THumanoid.RootPart
+    end
+    if TCharacter:FindFirstChild("Head") then
+        THead = TCharacter.Head
+    end
+    if TCharacter:FindFirstChildOfClass("Accessory") then
+        Accessory = TCharacter:FindFirstChildOfClass("Accessory")
+    end
+    if Accessoy and Accessory:FindFirstChild("Handle") then
+        Handle = Accessory.Handle
+    end
+
+    if Character and Humanoid and RootPart then
+        if RootPart.Velocity.Magnitude < 50 then
+            getgenv().OldPos = RootPart.CFrame
+        end
+        if THead then
+            workspace.CurrentCamera.CameraSubject = THead
+        elseif not THead and Handle then
+            workspace.CurrentCamera.CameraSubject = Handle
+        elseif THumanoid and TRootPart then
+            workspace.CurrentCamera.CameraSubject = THumanoid
+        end
+        if not TCharacter:FindFirstChildWhichIsA("BasePart") then
+            return
+        end
+        
+        local FPos = function(BasePart, Pos, Ang)
+            RootPart.CFrame = CFrame.new(BasePart.Position) * Pos * Ang
+            Character:SetPrimaryPartCFrame(CFrame.new(BasePart.Position) * Pos * Ang)
+            RootPart.Velocity = Vector3.new(9e7, 9e7 * 10, 9e7)
+            RootPart.RotVelocity = Vector3.new(9e8, 9e8, 9e8)
+        end
+        
+        local SFBasePart = function(BasePart)
+            local TimeToWait = 2
+            local Time = tick()
+            local Angle = 0
+
+            repeat
+                if RootPart and THumanoid then
+                    if BasePart.Velocity.Magnitude < 50 then
+                        Angle = Angle + 100
+
+                        FPos(BasePart, CFrame.new(0, 1.5, 0) + THumanoid.MoveDirection * BasePart.Velocity.Magnitude / 1.25, CFrame.Angles(math.rad(Angle),0 ,0))
+                        task.wait()
+
+                        FPos(BasePart, CFrame.new(0, -1.5, 0) + THumanoid.MoveDirection * BasePart.Velocity.Magnitude / 1.25, CFrame.Angles(math.rad(Angle), 0, 0))
+                        task.wait()
+
+                        FPos(BasePart, CFrame.new(2.25, 1.5, -2.25) + THumanoid.MoveDirection * BasePart.Velocity.Magnitude / 1.25, CFrame.Angles(math.rad(Angle), 0, 0))
+                        task.wait()
+
+                        FPos(BasePart, CFrame.new(-2.25, -1.5, 2.25) + THumanoid.MoveDirection * BasePart.Velocity.Magnitude / 1.25, CFrame.Angles(math.rad(Angle), 0, 0))
+                        task.wait()
+
+                        FPos(BasePart, CFrame.new(0, 1.5, 0) + THumanoid.MoveDirection,CFrame.Angles(math.rad(Angle), 0, 0))
+                        task.wait()
+
+                        FPos(BasePart, CFrame.new(0, -1.5, 0) + THumanoid.MoveDirection,CFrame.Angles(math.rad(Angle), 0, 0))
+                        task.wait()
+                    else
+                        FPos(BasePart, CFrame.new(0, 1.5, THumanoid.WalkSpeed), CFrame.Angles(math.rad(90), 0, 0))
+                        task.wait()
+
+                        FPos(BasePart, CFrame.new(0, -1.5, -THumanoid.WalkSpeed), CFrame.Angles(0, 0, 0))
+                        task.wait()
+
+                        FPos(BasePart, CFrame.new(0, 1.5, THumanoid.WalkSpeed), CFrame.Angles(math.rad(90), 0, 0))
+                        task.wait()
+                        
+                        FPos(BasePart, CFrame.new(0, 1.5, TRootPart.Velocity.Magnitude / 1.25), CFrame.Angles(math.rad(90), 0, 0))
+                        task.wait()
+
+                        FPos(BasePart, CFrame.new(0, -1.5, -TRootPart.Velocity.Magnitude / 1.25), CFrame.Angles(0, 0, 0))
+                        task.wait()
+
+                        FPos(BasePart, CFrame.new(0, 1.5, TRootPart.Velocity.Magnitude / 1.25), CFrame.Angles(math.rad(90), 0, 0))
+                        task.wait()
+
+                        FPos(BasePart, CFrame.new(0, -1.5, 0), CFrame.Angles(math.rad(90), 0, 0))
+                        task.wait()
+
+                        FPos(BasePart, CFrame.new(0, -1.5, 0), CFrame.Angles(0, 0, 0))
+                        task.wait()
+
+                        FPos(BasePart, CFrame.new(0, -1.5 ,0), CFrame.Angles(math.rad(-90), 0, 0))
+                        task.wait()
+
+                        FPos(BasePart, CFrame.new(0, -1.5, 0), CFrame.Angles(0, 0, 0))
+                        task.wait()
+                    end
+                else
+                    break
+                end
+            until BasePart.Velocity.Magnitude > 500 or BasePart.Parent ~= TargetPlayer.Character or TargetPlayer.Parent ~= Players or not TargetPlayer.Character == TCharacter or THumanoid.Sit or Humanoid.Health <= 0 or tick() > Time + TimeToWait
+        end
+        
+        workspace.FallenPartsDestroyHeight = 0/0
+
+        Humanoid:SetStateEnabled(Enum.HumanoidStateType.Seated, false)
+        
+        if TRootPart and THead then
+            if (TRootPart.CFrame.p - THead.CFrame.p).Magnitude > 5 then
+                SFBasePart(THead)
+            else
+                SFBasePart(TRootPart)
+            end
+        elseif TRootPart and not THead then
+            SFBasePart(TRootPart)
+        elseif not TRootPart and THead then
+            SFBasePart(THead)
+        elseif not TRootPart and not THead and Accessory and Handle then
+            SFBasePart(Handle)
+        end
+        
+        Humanoid:SetStateEnabled(Enum.HumanoidStateType.Seated, true)
+        workspace.CurrentCamera.CameraSubject = Humanoid
+        
+        repeat
+            RootPart.CFrame = getgenv().OldPos * CFrame.new(0, .5, 0)
+            Character:SetPrimaryPartCFrame(getgenv().OldPos * CFrame.new(0, .5, 0))
+            Humanoid:ChangeState("GettingUp")
+            table.foreach(Character:GetChildren(), function(_, x)
+                if x:IsA("BasePart") then
+                    x.Velocity, x.RotVelocity = Vector3.new(), Vector3.new()
+                end
+            end)
+            task.wait()
+        until (RootPart.Position - getgenv().OldPos.p).Magnitude < 25
+        workspace.FallenPartsDestroyHeight = getgenv().FPDH
+    end
+end
+
+local function spamFling(plr)
+    while loopTp==true do
+        SkidFling(plr)
+        RunService.Stepped:Wait()
+    end
+end
 
 local function fling()
 	local c, hrp, vel, movel = nil, nil, nil, 0.1
@@ -101,9 +260,9 @@ local function STOP()
 end
 
 local UI = Instance.new("ScreenGui")
+UI.DisplayOrder = 2147483647
 UI.ResetOnSpawn = false
 UI.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-UI.DisplayOrder=999999999999999
 UI.Name = "UI"
 
 local Frame = Instance.new("Frame")
@@ -113,11 +272,9 @@ Frame.BorderColor = BrickColor.new("Really black")
 Frame.BorderColor3 = Color3.fromRGB(0, 0, 0)
 Frame.BorderSizePixel = 0
 Frame.Position = UDim2.new(0.5, 0, 0.5, 0)
-Frame.Size = UDim2.new(0.45, 0, 0.24, 0)
+Frame.Size = UDim2.new(0.45, 0, 0.32, 0)
 
 local UIDragDetector = Instance.new("UIDragDetector")
-UIDragDetector.DragUDim2 = UDim2.new(0, 59, 0, 19)
-UIDragDetector.Enabled = true
 
 local UICorner = Instance.new("UICorner")
 UICorner.BottomLeftRadius = UDim.new(0.1, 0)
@@ -143,13 +300,9 @@ TextLabel.Position = UDim2.new(0.07, 0, 0.03, 0)
 TextLabel.Size = UDim2.new(0.87, 0, 0.16, 0)
 TextLabel.Transparency = 1
 TextLabel.ZIndex = 2
-TextLabel.TextTransparency=0
 
 local UIStroke = Instance.new("UIStroke")
 UIStroke.Thickness = 3
-
-local UIAspectRatioConstraint = Instance.new("UIAspectRatioConstraint")
-UIAspectRatioConstraint.AspectRatio = 2.44
 
 local ToggleButton = Instance.new("Frame")
 ToggleButton.AnchorPoint = Vector2.new(0.5, 0.5)
@@ -157,8 +310,8 @@ ToggleButton.BackgroundColor3 = Color3.fromRGB(119, 41, 204)
 ToggleButton.BorderColor = BrickColor.new("Really black")
 ToggleButton.BorderColor3 = Color3.fromRGB(0, 0, 0)
 ToggleButton.BorderSizePixel = 0
-ToggleButton.Position = UDim2.new(0.5, 0, 0.83, 0)
-ToggleButton.Size = UDim2.new(0.52, 0, 0.24, 0)
+ToggleButton.Position = UDim2.new(0.5, 0, 0.85, 0)
+ToggleButton.Size = UDim2.new(0.52, 0, 0.2, 0)
 ToggleButton.ZIndex = 2
 ToggleButton.Name = "ToggleButton"
 
@@ -169,6 +322,7 @@ hitbox.TextColor = BrickColor.new("Really black")
 hitbox.TextColor3 = Color3.fromRGB(0, 0, 0)
 hitbox.TextScaled = true
 hitbox.TextSize = 14
+hitbox.TextTransparency = 1
 hitbox.TextWrapped = true
 hitbox.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 hitbox.BackgroundTransparency = 1
@@ -224,7 +378,6 @@ onoff.Position = UDim2.new(1.2, 0, 0.58, 0)
 onoff.Size = UDim2.new(0.23, 0, 0.41, 0)
 onoff.Transparency = 1
 onoff.Name = "onoff"
-onoff.TextTransparency=0
 
 local UIStroke_2 = Instance.new("UIStroke")
 UIStroke_2.Thickness = 3
@@ -245,7 +398,6 @@ TextLabel_2.BorderSizePixel = 0
 TextLabel_2.Position = UDim2.new(0.3, 0, 0.22, 0)
 TextLabel_2.Size = UDim2.new(0.4, 0, 0.53, 0)
 TextLabel_2.Transparency = 1
-TextLabel_2.TextTransparency=0
 
 local UIStroke_3 = Instance.new("UIStroke")
 UIStroke_3.Thickness = 3
@@ -255,8 +407,8 @@ Player.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 Player.BorderColor = BrickColor.new("Really black")
 Player.BorderColor3 = Color3.fromRGB(0, 0, 0)
 Player.BorderSizePixel = 0
-Player.Position = UDim2.new(0.12, 0, 0.33, 0)
-Player.Size = UDim2.new(0.77, 0, 0.27, 0)
+Player.Position = UDim2.new(0.12, 0, 0.24, 0)
+Player.Size = UDim2.new(0.77, 0, 0.22, 0)
 Player.ZIndex = 2
 Player.Name = "Player"
 
@@ -274,6 +426,7 @@ Pattern_2.ImageTransparency = 0.6
 Pattern_2.ScaleType = Enum.ScaleType.Tile
 Pattern_2.TileSize = UDim2.new(0, 25, 0, 25)
 Pattern_2.BackgroundTransparency = 1
+Pattern_2.Position = UDim2.new(0, 0, 0, 0)
 Pattern_2.Size = UDim2.new(1, 0, 1, 0)
 Pattern_2.Transparency = 1
 Pattern_2.Name = "Pattern"
@@ -302,7 +455,6 @@ TextLabel_3.Position = UDim2.new(0.16, 0, 0.22, 0)
 TextLabel_3.Size = UDim2.new(0.67, 0, 0.53, 0)
 TextLabel_3.Transparency = 1
 TextLabel_3.ZIndex = 2
-TextLabel_3.TextTransparency=0
 
 local UIStroke_4 = Instance.new("UIStroke")
 UIStroke_4.Thickness = 3
@@ -314,6 +466,7 @@ hitbox_2.TextColor = BrickColor.new("Really black")
 hitbox_2.TextColor3 = Color3.fromRGB(0, 0, 0)
 hitbox_2.TextScaled = true
 hitbox_2.TextSize = 14
+hitbox_2.TextTransparency = 1
 hitbox_2.TextWrapped = true
 hitbox_2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 hitbox_2.BackgroundTransparency = 1
@@ -323,6 +476,24 @@ hitbox_2.BorderSizePixel = 0
 hitbox_2.Size = UDim2.new(1, 0, 1, 0)
 hitbox_2.Transparency = 1
 hitbox_2.Name = "hitbox"
+
+local PlayerSelection = Instance.new("Frame")
+PlayerSelection.BackgroundColor3 = Color3.fromRGB(85, 0, 163)
+PlayerSelection.BorderColor = BrickColor.new("Really black")
+PlayerSelection.BorderColor3 = Color3.fromRGB(0, 0, 0)
+PlayerSelection.BorderSizePixel = 0
+PlayerSelection.Position = UDim2.new(1.02, 0, -0.25, 0)
+PlayerSelection.Size = UDim2.new(0.55, 0, 1.49, 0)
+PlayerSelection.Visible = false
+PlayerSelection.ZIndex = 2
+PlayerSelection.Name = "PlayerSelection"
+
+local UICorner_6 = Instance.new("UICorner")
+UICorner_6.BottomLeftRadius = UDim.new(0.1, 0)
+UICorner_6.BottomRightRadius = UDim.new(0.1, 0)
+UICorner_6.CornerRadius = UDim.new(0.1, 0)
+UICorner_6.TopLeftRadius = UDim.new(0.1, 0)
+UICorner_6.TopRightRadius = UDim.new(0.1, 0)
 
 local Pattern_3 = Instance.new("ImageLabel")
 Pattern_3.Image = "rbxassetid://121480522"
@@ -335,48 +506,12 @@ Pattern_3.Size = UDim2.new(1, 0, 1, 0)
 Pattern_3.Transparency = 1
 Pattern_3.Name = "Pattern"
 
-local UICorner_6 = Instance.new("UICorner")
-UICorner_6.BottomLeftRadius = UDim.new(0.1, 0)
-UICorner_6.BottomRightRadius = UDim.new(0.1, 0)
-UICorner_6.CornerRadius = UDim.new(0.1, 0)
-UICorner_6.TopLeftRadius = UDim.new(0.1, 0)
-UICorner_6.TopRightRadius = UDim.new(0.1, 0)
-
-local PlayerSelection = Instance.new("Frame")
-PlayerSelection.BackgroundColor3 = Color3.fromRGB(85, 0, 163)
-PlayerSelection.BorderColor = BrickColor.new("Really black")
-PlayerSelection.BorderColor3 = Color3.fromRGB(0, 0, 0)
-PlayerSelection.BorderSizePixel = 0
-PlayerSelection.Position = UDim2.new(1.02, 0, -0.25, 0)
-PlayerSelection.Size = UDim2.new(0.547, 0,1.491, 0)
-PlayerSelection.Visible = false
-PlayerSelection.ZIndex = 2
-PlayerSelection.Name = "PlayerSelection"
-
 local UICorner_7 = Instance.new("UICorner")
 UICorner_7.BottomLeftRadius = UDim.new(0.1, 0)
 UICorner_7.BottomRightRadius = UDim.new(0.1, 0)
 UICorner_7.CornerRadius = UDim.new(0.1, 0)
 UICorner_7.TopLeftRadius = UDim.new(0.1, 0)
 UICorner_7.TopRightRadius = UDim.new(0.1, 0)
-
-local Pattern_4 = Instance.new("ImageLabel")
-Pattern_4.Image = "rbxassetid://121480522"
---[[ Unsupported Type: Content For : ImageContent ]]
-Pattern_4.ImageTransparency = 0.8
-Pattern_4.ScaleType = Enum.ScaleType.Tile
-Pattern_4.TileSize = UDim2.new(0, 45, 0, 45)
-Pattern_4.BackgroundTransparency = 1
-Pattern_4.Size = UDim2.new(1, 0, 1, 0)
-Pattern_4.Transparency = 1
-Pattern_4.Name = "Pattern"
-
-local UICorner_8 = Instance.new("UICorner")
-UICorner_8.BottomLeftRadius = UDim.new(0.1, 0)
-UICorner_8.BottomRightRadius = UDim.new(0.1, 0)
-UICorner_8.CornerRadius = UDim.new(0.1, 0)
-UICorner_8.TopLeftRadius = UDim.new(0.1, 0)
-UICorner_8.TopRightRadius = UDim.new(0.1, 0)
 
 local Close = Instance.new("Frame")
 Close.AnchorPoint = Vector2.new(0.5, 0.5)
@@ -395,6 +530,7 @@ hitbox_3.Text = ""
 hitbox_3.TextColor = BrickColor.new("Really black")
 hitbox_3.TextColor3 = Color3.fromRGB(0, 0, 0)
 hitbox_3.TextSize = 14
+hitbox_3.TextTransparency = 1
 hitbox_3.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 hitbox_3.BackgroundTransparency = 1
 hitbox_3.BorderColor = BrickColor.new("Really black")
@@ -404,12 +540,12 @@ hitbox_3.Size = UDim2.new(1, 0, 1, 0)
 hitbox_3.Transparency = 1
 hitbox_3.Name = "hitbox"
 
-local UICorner_9 = Instance.new("UICorner")
-UICorner_9.BottomLeftRadius = UDim.new(0.3, 0)
-UICorner_9.BottomRightRadius = UDim.new(0.3, 0)
-UICorner_9.CornerRadius = UDim.new(0.3, 0)
-UICorner_9.TopLeftRadius = UDim.new(0.3, 0)
-UICorner_9.TopRightRadius = UDim.new(0.3, 0)
+local UICorner_8 = Instance.new("UICorner")
+UICorner_8.BottomLeftRadius = UDim.new(0.3, 0)
+UICorner_8.BottomRightRadius = UDim.new(0.3, 0)
+UICorner_8.CornerRadius = UDim.new(0.3, 0)
+UICorner_8.TopLeftRadius = UDim.new(0.3, 0)
+UICorner_8.TopRightRadius = UDim.new(0.3, 0)
 
 local TextLabel_4 = Instance.new("TextLabel")
 TextLabel_4.FontFace = Font.new("rbxassetid://12187365977", Enum.FontWeight.Medium, Enum.FontStyle.Normal)
@@ -427,28 +563,27 @@ TextLabel_4.BorderSizePixel = 0
 TextLabel_4.Position = UDim2.new(0.3, 0, 0.22, 0)
 TextLabel_4.Size = UDim2.new(0.4, 0, 0.53, 0)
 TextLabel_4.Transparency = 1
-TextLabel_4.TextTransparency=0
 
 local UIStroke_5 = Instance.new("UIStroke")
 UIStroke_5.Thickness = 3
 
-local Pattern_5 = Instance.new("ImageLabel")
-Pattern_5.Image = "rbxassetid://121480522"
+local Pattern_4 = Instance.new("ImageLabel")
+Pattern_4.Image = "rbxassetid://121480522"
 --[[ Unsupported Type: Content For : ImageContent ]]
-Pattern_5.ImageTransparency = 0.6
-Pattern_5.ScaleType = Enum.ScaleType.Tile
-Pattern_5.TileSize = UDim2.new(0, 25, 0, 25)
-Pattern_5.BackgroundTransparency = 1
-Pattern_5.Size = UDim2.new(1, 0, 1, 0)
-Pattern_5.Transparency = 1
-Pattern_5.Name = "Pattern"
+Pattern_4.ImageTransparency = 0.6
+Pattern_4.ScaleType = Enum.ScaleType.Tile
+Pattern_4.TileSize = UDim2.new(0, 25, 0, 25)
+Pattern_4.BackgroundTransparency = 1
+Pattern_4.Size = UDim2.new(1, 0, 1, 0)
+Pattern_4.Transparency = 1
+Pattern_4.Name = "Pattern"
 
-local UICorner_10 = Instance.new("UICorner")
-UICorner_10.BottomLeftRadius = UDim.new(0.3, 0)
-UICorner_10.BottomRightRadius = UDim.new(0.3, 0)
-UICorner_10.CornerRadius = UDim.new(0.3, 0)
-UICorner_10.TopLeftRadius = UDim.new(0.3, 0)
-UICorner_10.TopRightRadius = UDim.new(0.3, 0)
+local UICorner_9 = Instance.new("UICorner")
+UICorner_9.BottomLeftRadius = UDim.new(0.3, 0)
+UICorner_9.BottomRightRadius = UDim.new(0.3, 0)
+UICorner_9.CornerRadius = UDim.new(0.3, 0)
+UICorner_9.TopLeftRadius = UDim.new(0.3, 0)
+UICorner_9.TopRightRadius = UDim.new(0.3, 0)
 
 local ScrollingFrame = Instance.new("ScrollingFrame")
 ScrollingFrame.AutomaticCanvasSize = Enum.AutomaticSize.Y
@@ -476,30 +611,30 @@ templat.Visible = false
 templat.ZIndex = 2
 templat.Name = "templat"
 
+local UICorner_10 = Instance.new("UICorner")
+UICorner_10.BottomLeftRadius = UDim.new(0.3, 0)
+UICorner_10.BottomRightRadius = UDim.new(0.3, 0)
+UICorner_10.CornerRadius = UDim.new(0.3, 0)
+UICorner_10.TopLeftRadius = UDim.new(0.3, 0)
+UICorner_10.TopRightRadius = UDim.new(0.3, 0)
+
+local Pattern_5 = Instance.new("ImageLabel")
+Pattern_5.Image = "rbxassetid://121480522"
+--[[ Unsupported Type: Content For : ImageContent ]]
+Pattern_5.ImageTransparency = 0.6
+Pattern_5.ScaleType = Enum.ScaleType.Tile
+Pattern_5.TileSize = UDim2.new(0, 25, 0, 25)
+Pattern_5.BackgroundTransparency = 1
+Pattern_5.Size = UDim2.new(1, 0, 1, 0)
+Pattern_5.Transparency = 1
+Pattern_5.Name = "Pattern"
+
 local UICorner_11 = Instance.new("UICorner")
 UICorner_11.BottomLeftRadius = UDim.new(0.3, 0)
 UICorner_11.BottomRightRadius = UDim.new(0.3, 0)
 UICorner_11.CornerRadius = UDim.new(0.3, 0)
 UICorner_11.TopLeftRadius = UDim.new(0.3, 0)
 UICorner_11.TopRightRadius = UDim.new(0.3, 0)
-
-local Pattern_6 = Instance.new("ImageLabel")
-Pattern_6.Image = "rbxassetid://121480522"
---[[ Unsupported Type: Content For : ImageContent ]]
-Pattern_6.ImageTransparency = 0.6
-Pattern_6.ScaleType = Enum.ScaleType.Tile
-Pattern_6.TileSize = UDim2.new(0, 25, 0, 25)
-Pattern_6.BackgroundTransparency = 1
-Pattern_6.Size = UDim2.new(1, 0, 1, 0)
-Pattern_6.Transparency = 1
-Pattern_6.Name = "Pattern"
-
-local UICorner_12 = Instance.new("UICorner")
-UICorner_12.BottomLeftRadius = UDim.new(0.3, 0)
-UICorner_12.BottomRightRadius = UDim.new(0.3, 0)
-UICorner_12.CornerRadius = UDim.new(0.3, 0)
-UICorner_12.TopLeftRadius = UDim.new(0.3, 0)
-UICorner_12.TopRightRadius = UDim.new(0.3, 0)
 
 local TextLabel_5 = Instance.new("TextLabel")
 TextLabel_5.FontFace = Font.new("rbxassetid://12187365977", Enum.FontWeight.Medium, Enum.FontStyle.Normal)
@@ -518,7 +653,6 @@ TextLabel_5.Position = UDim2.new(0.06, 0, 0.22, 0)
 TextLabel_5.Size = UDim2.new(0.89, 0, 0.53, 0)
 TextLabel_5.Transparency = 1
 TextLabel_5.ZIndex = 2
-TextLabel_5.TextTransparency=0
 
 local UIStroke_6 = Instance.new("UIStroke")
 UIStroke_6.Thickness = 3
@@ -527,13 +661,200 @@ local UIListLayout = Instance.new("UIListLayout")
 UIListLayout.Padding = UDim.new(0.05, 0)
 UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
 
+local bg = Instance.new("CanvasGroup")
+bg.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+bg.BackgroundTransparency = 1
+bg.BorderColor = BrickColor.new("Really black")
+bg.BorderColor3 = Color3.fromRGB(0, 0, 0)
+bg.BorderSizePixel = 0
+bg.Size = UDim2.new(1, 0, 1, 0)
+bg.Transparency = 1
+bg.Name = "bg"
+
+local Pattern_6 = Instance.new("ImageLabel")
+Pattern_6.Image = "rbxassetid://121480522"
+--[[ Unsupported Type: Content For : ImageContent ]]
+Pattern_6.ImageTransparency = 0.8
+Pattern_6.ScaleType = Enum.ScaleType.Tile
+Pattern_6.TileSize = UDim2.new(0, 52, 0, 52)
+Pattern_6.BackgroundTransparency = 1
+Pattern_6.Position = UDim2.new(0, -52, 0, -52)
+Pattern_6.Size = UDim2.new(1, 52, 1, 52)
+Pattern_6.Transparency = 1
+Pattern_6.Name = "Pattern"
+
+local UICorner_12 = Instance.new("UICorner")
+UICorner_12.BottomLeftRadius = UDim.new(0.1, 0)
+UICorner_12.BottomRightRadius = UDim.new(0.1, 0)
+UICorner_12.CornerRadius = UDim.new(0.1, 0)
+UICorner_12.TopLeftRadius = UDim.new(0.1, 0)
+UICorner_12.TopRightRadius = UDim.new(0.1, 0)
+
+local UICorner_13 = Instance.new("UICorner")
+UICorner_13.BottomLeftRadius = UDim.new(0.1, 0)
+UICorner_13.BottomRightRadius = UDim.new(0.1, 0)
+UICorner_13.CornerRadius = UDim.new(0.1, 0)
+UICorner_13.TopLeftRadius = UDim.new(0.1, 0)
+UICorner_13.TopRightRadius = UDim.new(0.1, 0)
+
+local SelectFling = Instance.new("CanvasGroup")
+SelectFling.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+SelectFling.BackgroundTransparency = 0.8
+SelectFling.BorderColor = BrickColor.new("Really black")
+SelectFling.BorderColor3 = Color3.fromRGB(0, 0, 0)
+SelectFling.BorderSizePixel = 0
+SelectFling.Position = UDim2.new(0.13, 0, 0.49, 0)
+SelectFling.Size = UDim2.new(0.74, 0, 0.18, 0)
+SelectFling.Transparency = 0.8
+SelectFling.Name = "SelectFling"
+
+local UICorner_14 = Instance.new("UICorner")
+UICorner_14.BottomLeftRadius = UDim.new(0.3, 0)
+UICorner_14.BottomRightRadius = UDim.new(0.3, 0)
+UICorner_14.CornerRadius = UDim.new(0.3, 0)
+UICorner_14.TopLeftRadius = UDim.new(0.3, 0)
+UICorner_14.TopRightRadius = UDim.new(0.3, 0)
+
+local SkidFling = Instance.new("Frame")
+SkidFling.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+SkidFling.BackgroundTransparency = 1
+SkidFling.BorderColor = BrickColor.new("Really black")
+SkidFling.BorderColor3 = Color3.fromRGB(0, 0, 0)
+SkidFling.BorderSizePixel = 0
+SkidFling.Position = UDim2.new(0.5, 0, 0, 0)
+SkidFling.Size = UDim2.new(0.5, 0, 1, 0)
+SkidFling.Transparency = 1
+SkidFling.ZIndex = 3
+SkidFling.Name = "SkidFling"
+
+local hitbox_4 = Instance.new("TextButton")
+hitbox_4.FontFace = Font.new("rbxasset://fonts/families/SourceSansPro.json", Enum.FontWeight.Regular, Enum.FontStyle.Normal)
+hitbox_4.Text = ""
+hitbox_4.TextColor = BrickColor.new("Really black")
+hitbox_4.TextColor3 = Color3.fromRGB(0, 0, 0)
+hitbox_4.TextScaled = true
+hitbox_4.TextSize = 14
+hitbox_4.TextTransparency = 1
+hitbox_4.TextWrapped = true
+hitbox_4.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+hitbox_4.BackgroundTransparency = 1
+hitbox_4.BorderColor = BrickColor.new("Really black")
+hitbox_4.BorderColor3 = Color3.fromRGB(0, 0, 0)
+hitbox_4.BorderSizePixel = 0
+hitbox_4.Size = UDim2.new(1, 0, 1, 0)
+hitbox_4.Transparency = 1
+hitbox_4.Name = "hitbox"
+
+local UITextSizeConstraint_2 = Instance.new("UITextSizeConstraint")
+UITextSizeConstraint_2.MaxTextSize = 14
+
+local TextLabel_6 = Instance.new("TextLabel")
+TextLabel_6.FontFace = Font.new("rbxassetid://12187365977", Enum.FontWeight.Medium, Enum.FontStyle.Normal)
+TextLabel_6.Text = "Skid Fling"
+TextLabel_6.TextColor = BrickColor.new("Institutional white")
+TextLabel_6.TextColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel_6.TextScaled = true
+TextLabel_6.TextSize = 14
+TextLabel_6.TextWrapped = true
+TextLabel_6.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel_6.BackgroundTransparency = 1
+TextLabel_6.BorderColor = BrickColor.new("Really black")
+TextLabel_6.BorderColor3 = Color3.fromRGB(0, 0, 0)
+TextLabel_6.BorderSizePixel = 0
+TextLabel_6.Position = UDim2.new(0.16, 0, 0.22, 0)
+TextLabel_6.Size = UDim2.new(0.67, 0, 0.53, 0)
+TextLabel_6.Transparency = 1
+TextLabel_6.ZIndex = 2
+
+local UIStroke_7 = Instance.new("UIStroke")
+UIStroke_7.Thickness = 3
+
+local UITextSizeConstraint_3 = Instance.new("UITextSizeConstraint")
+UITextSizeConstraint_3.MaxTextSize = 22
+
+local TouchFling = Instance.new("Frame")
+TouchFling.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+TouchFling.BackgroundTransparency = 1
+TouchFling.BorderColor = BrickColor.new("Really black")
+TouchFling.BorderColor3 = Color3.fromRGB(0, 0, 0)
+TouchFling.BorderSizePixel = 0
+TouchFling.Size = UDim2.new(0.5, 0, 1, 0)
+TouchFling.Transparency = 1
+TouchFling.ZIndex = 3
+TouchFling.Name = "TouchFling"
+
+local hitbox_5 = Instance.new("TextButton")
+hitbox_5.FontFace = Font.new("rbxasset://fonts/families/SourceSansPro.json", Enum.FontWeight.Regular, Enum.FontStyle.Normal)
+hitbox_5.Text = ""
+hitbox_5.TextColor = BrickColor.new("Really black")
+hitbox_5.TextColor3 = Color3.fromRGB(0, 0, 0)
+hitbox_5.TextScaled = true
+hitbox_5.TextSize = 14
+hitbox_5.TextTransparency = 1
+hitbox_5.TextWrapped = true
+hitbox_5.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+hitbox_5.BackgroundTransparency = 1
+hitbox_5.BorderColor = BrickColor.new("Really black")
+hitbox_5.BorderColor3 = Color3.fromRGB(0, 0, 0)
+hitbox_5.BorderSizePixel = 0
+hitbox_5.Size = UDim2.new(1, 0, 1, 0)
+hitbox_5.Transparency = 1
+hitbox_5.Name = "hitbox"
+
+local UITextSizeConstraint_4 = Instance.new("UITextSizeConstraint")
+UITextSizeConstraint_4.MaxTextSize = 14
+
+local TextLabel_7 = Instance.new("TextLabel")
+TextLabel_7.FontFace = Font.new("rbxassetid://12187365977", Enum.FontWeight.Medium, Enum.FontStyle.Normal)
+TextLabel_7.Text = "Touch Fling"
+TextLabel_7.TextColor = BrickColor.new("Institutional white")
+TextLabel_7.TextColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel_7.TextScaled = true
+TextLabel_7.TextSize = 14
+TextLabel_7.TextWrapped = true
+TextLabel_7.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel_7.BackgroundTransparency = 1
+TextLabel_7.BorderColor = BrickColor.new("Really black")
+TextLabel_7.BorderColor3 = Color3.fromRGB(0, 0, 0)
+TextLabel_7.BorderSizePixel = 0
+TextLabel_7.Position = UDim2.new(0.16, 0, 0.22, 0)
+TextLabel_7.Size = UDim2.new(0.67, 0, 0.53, 0)
+TextLabel_7.Transparency = 1
+TextLabel_7.ZIndex = 2
+
+local UIStroke_8 = Instance.new("UIStroke")
+UIStroke_8.Thickness = 3
+
+local UITextSizeConstraint_5 = Instance.new("UITextSizeConstraint")
+UITextSizeConstraint_5.MaxTextSize = 22
+
+local Selector = Instance.new("Frame")
+Selector.BackgroundColor3 = Color3.fromRGB(69, 82, 255)
+Selector.BorderColor = BrickColor.new("Really black")
+Selector.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Selector.BorderSizePixel = 0
+Selector.Size = UDim2.new(0.5, 0, 1, 0)
+Selector.Name = "Selector"
+
+local UICorner_15 = Instance.new("UICorner")
+UICorner_15.BottomLeftRadius = UDim.new(0.3, 0)
+UICorner_15.BottomRightRadius = UDim.new(0.3, 0)
+UICorner_15.CornerRadius = UDim.new(0.3, 0)
+UICorner_15.TopLeftRadius = UDim.new(0.3, 0)
+UICorner_15.TopRightRadius = UDim.new(0.3, 0)
+
+local UIAspectRatioConstraint = Instance.new("UIAspectRatioConstraint")
+UIAspectRatioConstraint.AspectRatio = 1.54
+UIAspectRatioConstraint.AspectType = Enum.AspectType.ScaleWithParentSize
+
 UI.Parent = lp.PlayerGui
+UI.Enabled=true
+Frame.Visible=true
 Frame.Parent = UI
 UIDragDetector.Parent = Frame
 UICorner.Parent = Frame
 TextLabel.Parent = Frame
 UIStroke.Parent = TextLabel
-UIAspectRatioConstraint.Parent = Frame
 ToggleButton.Parent = Frame
 hitbox.Parent = ToggleButton
 UITextSizeConstraint.Parent = hitbox
@@ -551,37 +872,59 @@ UICorner_5.Parent = Pattern_2
 TextLabel_3.Parent = Player
 UIStroke_4.Parent = TextLabel_3
 hitbox_2.Parent = Player
-Pattern_3.Parent = Frame
-UICorner_6.Parent = Pattern_3
 PlayerSelection.Parent = Frame
-UICorner_7.Parent = PlayerSelection
-Pattern_4.Parent = PlayerSelection
-UICorner_8.Parent = Pattern_4
+UICorner_6.Parent = PlayerSelection
+Pattern_3.Parent = PlayerSelection
+UICorner_7.Parent = Pattern_3
 Close.Parent = PlayerSelection
 hitbox_3.Parent = Close
-UICorner_9.Parent = Close
+UICorner_8.Parent = Close
 TextLabel_4.Parent = Close
 UIStroke_5.Parent = TextLabel_4
-Pattern_5.Parent = Close
-UICorner_10.Parent = Pattern_5
+Pattern_4.Parent = Close
+UICorner_9.Parent = Pattern_4
 ScrollingFrame.Parent = PlayerSelection
 templat.Parent = ScrollingFrame
-UICorner_11.Parent = templat
-Pattern_6.Parent = templat
-UICorner_12.Parent = Pattern_6
+UICorner_10.Parent = templat
+Pattern_5.Parent = templat
+UICorner_11.Parent = Pattern_5
 TextLabel_5.Parent = templat
 UIStroke_6.Parent = TextLabel_5
 UIListLayout.Parent = ScrollingFrame
+bg.Parent = Frame
+Pattern_6.Parent = bg
+UICorner_12.Parent = Pattern_6
+UICorner_13.Parent = bg
+SelectFling.Parent = Frame
+UICorner_14.Parent = SelectFling
+SkidFling.Parent = SelectFling
+hitbox_4.Parent = SkidFling
+UITextSizeConstraint_2.Parent = hitbox_4
+TextLabel_6.Parent = SkidFling
+UIStroke_7.Parent = TextLabel_6
+UITextSizeConstraint_3.Parent = TextLabel_6
+TouchFling.Parent = SelectFling
+hitbox_5.Parent = TouchFling
+UITextSizeConstraint_4.Parent = hitbox_5
+TextLabel_7.Parent = TouchFling
+UIStroke_8.Parent = TextLabel_7
+UITextSizeConstraint_5.Parent = TextLabel_7
+Selector.Parent = SelectFling
+UICorner_15.Parent = Selector
+UIAspectRatioConstraint.Parent = UI
+
 
 ToggleButton.hitbox.MouseButton1Click:Connect(function ()
     if loopTp then
         loopTp=false
         hiddenfling=false
         STOP()
+        onoff.Text="Off"
     else
-        loopTp=true
         if tpPerson~="" then
+            loopTp=true
             spamTP()
+            onoff.Text="On"
         end
     end
 end)
@@ -595,6 +938,29 @@ Player.hitbox.MouseButton1Click:Connect(function ()
         return 
     end
     PlayerSelection.Visible=true
+end)
+
+local d1=false
+
+TouchFling.hitbox.MouseButton1Click:Connect(function ()
+    if tpPerson or option==1 then return end
+    if d1 then return end
+    option=1
+    TweenService:Create(Selector,TweenInfo.new(0.2,Enum.EasingStyle.Quad), {Position=UDim2.new(0,0,0,0),Size=UDim2.new(1,0,1,0)}):Play()wait(0.2)
+    TweenService:Create(Selector,TweenInfo.new(0.2,Enum.EasingStyle.Quad), {Position=UDim2.new(0,0,0,0),Size=UDim2.new(0.5,0,1,0)}):Play()
+end)
+
+SkidFling.hitbox.MouseButton1Click:Connect(function ()
+    if tpPerson or option==2 then return end
+    if d1 then return end
+    d1=true
+    task.spawn(function ()
+        task.wait(0.42)
+        d1=false
+    end)
+    option=2
+    TweenService:Create(Selector,TweenInfo.new(0.2,Enum.EasingStyle.Quad), {Position=UDim2.new(0,0,0,0),Size=UDim2.new(1,0,1,0)}):Play()wait(0.2)
+    TweenService:Create(Selector,TweenInfo.new(0.2,Enum.EasingStyle.Quad), {Position=UDim2.new(0.5,0,0,0),Size=UDim2.new(0.5,0,1,0)}):Play()
 end)
 
 local frame=Frame
