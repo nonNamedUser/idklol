@@ -919,6 +919,7 @@ Selector.Parent = SelectFling
 UICorner_15.Parent = Selector
 UIAspectRatioConstraint.Parent = UI
 
+
 ToggleButton.hitbox.MouseButton1Click:Connect(function ()
     if loopTp then
         loopTp=false
@@ -950,8 +951,14 @@ local d1=false
 TouchFling.hitbox.MouseButton1Click:Connect(function ()
     if tpPerson or option==1 then return end
     if d1 then return end
+    d1=true
+    task.spawn(function ()
+        task.wait(0.42)
+        d1=false
+    end)
     option=1
-    TweenService:Create(Selector,TweenInfo.new(0.2,Enum.EasingStyle.Quad), {Position=UDim2.new(0,0,0,0),Size=UDim2.new(1,0,1,0)}):Play()wait(0.2)
+    TweenService:Create(Selector,TweenInfo.new(0.2,Enum.EasingStyle.Quad), {Position=UDim2.new(0,0,0,0),Size=UDim2.new(1,0,1,0)}):Play()
+    wait(0.2)
     TweenService:Create(Selector,TweenInfo.new(0.2,Enum.EasingStyle.Quad), {Position=UDim2.new(0,0,0,0),Size=UDim2.new(0.5,0,1,0)}):Play()
 end)
 
@@ -964,7 +971,8 @@ SkidFling.hitbox.MouseButton1Click:Connect(function ()
         d1=false
     end)
     option=2
-    TweenService:Create(Selector,TweenInfo.new(0.2,Enum.EasingStyle.Quad), {Position=UDim2.new(0,0,0,0),Size=UDim2.new(1,0,1,0)}):Play()wait(0.2)
+    TweenService:Create(Selector,TweenInfo.new(0.2,Enum.EasingStyle.Quad), {Position=UDim2.new(0,0,0,0),Size=UDim2.new(1,0,1,0)}):Play()
+    wait(0.2)
     TweenService:Create(Selector,TweenInfo.new(0.2,Enum.EasingStyle.Quad), {Position=UDim2.new(0.5,0,0,0),Size=UDim2.new(0.5,0,1,0)}):Play()
 end)
 
