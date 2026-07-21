@@ -959,7 +959,7 @@ hitbox_5.MouseButton1Click:Connect(function ()
     TweenService:Create(Selector,TweenInfo.new(0.2,Enum.EasingStyle.Quad), {Position=UDim2.new(0,0,0,0),Size=UDim2.new(0.5,0,1,0)}):Play()
 end)
 
-hitbox_4.hitbox.MouseButton1Click:Connect(function ()
+hitbox_4.MouseButton1Click:Connect(function ()
     if tpPerson or option==2 then return end
     if d1 then return end
     d1=true
